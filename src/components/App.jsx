@@ -3,28 +3,37 @@ import { useState } from 'react';
 
 function App() {
   const [text, setText] = useState('');
+  const [ingredient, setIngredient] = useState([]);
 
   const handleIngredient = (ev) => {
-    let cebollaIngredient = ev.target.form.elements.cebolla.checked;
-    let papasIngredient = ev.target.form.elements.papas.checked;
-    let huevosIngredient = ev.target.form.elements.huevos.checked;
-    let macarronesIngredient = ev.target.form.elements.macarrones.checked;
-    let nuecesIngredient = ev.target.form.elements.nueces.checked;
-    let cervezaIngredient = ev.target.form.elements.cerveza.checked;
+    const valueInput = ev.target.value;
 
-    if (
-      cebollaIngredient &&
-      papasIngredient &&
-      huevosIngredient &&
-      !macarronesIngredient &&
-      !nuecesIngredient &&
-      !cervezaIngredient
-    ) {
-      setText('Eres una persona concebollista');
-    } else {
-      setText('Eres un robot sin paladar');
+    if(!ingredient.includes(valueInput)){         // se añade
+      setIngredient([...ingredient, valueInput]);
+    } else {                                     // se quita
+      const ingredientClone = [...ingredient]
+      const index = ingredientClone.indexOf(valueInput) // se busca la posición del elem. marcado/checkeado -> index
+      ingredientClone.splice(index, 1)
+      setIngredient([...ingredientClone]);
     }
   };
+
+  const pintarMensaje = () => {
+
+    if(ingredient.includes('cebolla') &&
+       ingredient.includes('papas') &&
+       ingredient.includes('huevos') &&
+       !ingredient.includes('macarrones') &&
+       !ingredient.includes('nueces') &&
+       !ingredient.includes('cerveza') ){
+          return "Eres cebollista!"
+    } else {
+          return "Eres un robot :("
+    }
+
+    // Si se llama a la función pintarMensaje() no puede haber un set(), debe ser un return
+    
+  }
 
   return (
     <div>
@@ -36,6 +45,7 @@ function App() {
           name="ingredient"
           id="macarrones"
           onChange={handleIngredient}
+          value="macarrones"
         />
         <label htmlFor="papas">Papas</label>
         <input
@@ -43,6 +53,7 @@ function App() {
           name="ingredient"
           id="papas"
           onChange={handleIngredient}
+          value="papas"
         />
         <label htmlFor="nueces">Nueces</label>
         <input
@@ -50,6 +61,7 @@ function App() {
           name="ingredient"
           id="nueces"
           onChange={handleIngredient}
+          value="nueces"
         />
         <label htmlFor="huevos">Huevos</label>
         <input
@@ -57,6 +69,7 @@ function App() {
           name="ingredient"
           id="huevos"
           onChange={handleIngredient}
+          value="huevos"
         />
         <label htmlFor="cebolla">Cebolla</label>
         <input
@@ -64,6 +77,7 @@ function App() {
           name="ingredient"
           id="cebolla"
           onChange={handleIngredient}
+          value="cebolla"
         />
         <label htmlFor="cerveza">Cerveza</label>
         <input
@@ -71,9 +85,10 @@ function App() {
           name="ingredient"
           id="cerveza"
           onChange={handleIngredient}
+          value="cerveza"
         />
       </form>
-      <p>{text}</p>
+      <p>{pintarMensaje()}</p>
     </div>
   );
 }
